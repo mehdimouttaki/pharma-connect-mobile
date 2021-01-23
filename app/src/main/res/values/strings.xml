@@ -1,13 +1,17 @@
 <resources>
-    <string name="app_name">PharmaConnect</string>
+    <string name="app_name">Pharma Connect</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">M.Mouttaki</string>
+    <string name="nav_header_subtitle">mehdimouttaki99@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
+    <string name="your_address">My Address</string>
     <string name="menu_gallery">Gallery</string>
+    <string name="my_account">My Account</string>
+    <string name="my_commands">My Commands</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="pharmacies">Pharmacies</string>
 </resources>
