@@ -7,11 +7,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
     <string name="your_address">My Address</string>
-    <string name="menu_gallery">Gallery</string>
     <string name="my_account">My Account</string>
     <string name="my_commands">My Commands</string>
-    <string name="menu_slideshow">Slideshow</string>
     <string name="pharmacies">Pharmacies</string>
+    <string name="password">Password</string>
 </resources>

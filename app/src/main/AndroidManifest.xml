@@ -9,21 +9,17 @@
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.PharmaConnect">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".ProfileActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateAccountActivity">
-
+        <activity android:name=".LoginActivity">
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.PharmaConnect.NoActionBar">
-        </activity>
+        <activity android:name=".CreateAccountActivity" />
     </application>
 
 </manifest>
