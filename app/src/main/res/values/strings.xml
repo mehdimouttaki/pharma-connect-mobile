@@ -11,5 +11,11 @@
     <string name="my_account">My Account</string>
     <string name="my_commands">My Commands</string>
     <string name="pharmacies">Pharmacies</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
+
+
 </resources>
