@@ -1,6 +1,8 @@
 package ma.pharmaconnect.pharmaconnect;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -26,10 +28,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        // wach deja mssjl -> MainActivity
-
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+
+        String usernameFromSharedPref = sharedPref.getString("username", null);
+        if (usernameFromSharedPref != null) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
+
         setContentView(R.layout.activity_login);
     }
 
@@ -68,6 +76,16 @@ public class LoginActivity extends AppCompatActivity {
         ClientShowDTO clientShowDTO = new Gson().fromJson(response.toString(), ClientShowDTO.class);
         Toast.makeText(this, clientShowDTO.toString(), Toast.LENGTH_LONG).show();
         //hna anssjloh
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("username", clientShowDTO.getUsername());
+        editor.putString("firstName", clientShowDTO.getFirstName());
+        editor.putString("lastName", clientShowDTO.getLastName());
+        editor.putString("phone", clientShowDTO.getPhone());
+        editor.putString("status", clientShowDTO.getStatus());
+        editor.putString("role", clientShowDTO.getRole());
+        editor.apply();
     }
 
     public void onClickTextDontHaveAccount(View view) {
