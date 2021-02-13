@@ -1,9 +1,9 @@
 package ma.pharmaconnect.pharmaconnect;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,11 +30,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         String usernameFromSharedPref = sharedPref.getString("username", null);
         if (usernameFromSharedPref != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
             finish();
         }
 
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     saveClientLocally(response);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         ClientShowDTO clientShowDTO = new Gson().fromJson(response.toString(), ClientShowDTO.class);
         Toast.makeText(this, clientShowDTO.toString(), Toast.LENGTH_LONG).show();
         //hna anssjloh
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("username", clientShowDTO.getUsername());

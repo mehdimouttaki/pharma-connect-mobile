@@ -1,7 +1,9 @@
 package ma.pharmaconnect.pharmaconnect;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ma.pharmaconnect.pharmaconnect.dto.ClientCreationDTO;
+import ma.pharmaconnect.pharmaconnect.dto.ClientShowDTO;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -77,7 +80,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(clientCreationDTOJson), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
+                saveClientLocally(response);
+                startActivity(new Intent(CreateAccountActivity.this, ProfileActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -89,5 +93,22 @@ public class CreateAccountActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
 
 
+    }
+
+
+    private void saveClientLocally(JSONObject response) {
+        ClientShowDTO clientShowDTO = new Gson().fromJson(response.toString(), ClientShowDTO.class);
+        Toast.makeText(this, clientShowDTO.toString(), Toast.LENGTH_LONG).show();
+        //hna anssjloh
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("username", clientShowDTO.getUsername());
+        editor.putString("firstName", clientShowDTO.getFirstName());
+        editor.putString("lastName", clientShowDTO.getLastName());
+        editor.putString("phone", clientShowDTO.getPhone());
+        editor.putString("status", clientShowDTO.getStatus());
+        editor.putString("role", clientShowDTO.getRole());
+        editor.apply();
     }
 }
