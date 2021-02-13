@@ -15,9 +15,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import ma.pharmaconnect.pharmaconnect.dto.ClientCreationDTO;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -43,7 +46,11 @@ public class CreateAccountActivity extends AppCompatActivity {
         String password = passwordNameEditText.getText().toString();
 
 
-        sendData(firstName, lastName, phone, email, password);
+        try {
+            sendData(firstName, lastName, phone, email, password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -55,7 +62,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
 
-    private void sendData(String firstName, String lastName, String phone, String email, String password) {
+    private void sendData(String firstName, String lastName, String phone, String email, String password) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -63,20 +70,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         String url = "http://10.128.72.17:8080/api/clients";
 
+        ClientCreationDTO clientCreationDTO = new ClientCreationDTO(firstName, lastName, email, phone, password);
 
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("firstName", firstName);
-            jsonObject.put("lastName", lastName);
-            jsonObject.put("phone", phone);
-            jsonObject.put("username", email);
-            jsonObject.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String clientCreationDTOJson = new Gson().toJson(clientCreationDTO);
 
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(clientCreationDTOJson), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
