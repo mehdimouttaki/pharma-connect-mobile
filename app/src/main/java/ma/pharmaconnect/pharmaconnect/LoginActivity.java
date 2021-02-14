@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String usernameFromSharedPref = sharedPref.getString("username", null);
         if (usernameFromSharedPref != null) {
-            startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
 
