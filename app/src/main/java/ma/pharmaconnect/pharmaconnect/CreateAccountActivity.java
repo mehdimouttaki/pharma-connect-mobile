@@ -35,7 +35,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     public void onClickButton(View view) {
 
-
         EditText firstNameEditText = findViewById(R.id.firstNameTxt);
         EditText lastNameEditText = findViewById(R.id.lastNameTxt);
         EditText phoneNameEditText = findViewById(R.id.phoneTxt);
@@ -48,13 +47,11 @@ public class CreateAccountActivity extends AppCompatActivity {
         String email = emailNameEditText.getText().toString();
         String password = passwordNameEditText.getText().toString();
 
-
         try {
             sendData(firstName, lastName, phone, email, password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -68,8 +65,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     private void sendData(String firstName, String lastName, String phone, String email, String password) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(this);
-
-        Log.d("MEDHI_LOG", firstName + ", " + lastName + ", " + phone + ", " + email + ", " + password);
 
         String url = "http://10.128.72.17:8080/api/clients";
 
@@ -92,14 +87,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         queue.add(jsonObjectRequest);
 
-
     }
-
 
     private void saveClientLocally(JSONObject response) {
         ClientShowDTO clientShowDTO = new Gson().fromJson(response.toString(), ClientShowDTO.class);
-        Toast.makeText(this, clientShowDTO.toString(), Toast.LENGTH_LONG).show();
-        //hna anssjloh
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         SharedPreferences.Editor editor = sharedPref.edit();

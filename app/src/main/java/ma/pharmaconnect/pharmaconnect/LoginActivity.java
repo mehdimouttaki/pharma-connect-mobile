@@ -74,8 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveClientLocally(JSONObject response) {
         ClientShowDTO clientShowDTO = new Gson().fromJson(response.toString(), ClientShowDTO.class);
-        Toast.makeText(this, clientShowDTO.toString(), Toast.LENGTH_LONG).show();
-        //hna anssjloh
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         SharedPreferences.Editor editor = sharedPref.edit();

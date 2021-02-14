@@ -3,13 +3,13 @@
     <item
         android:id="@+id/pharmacy_item"
         android:title="Pharmacy"
-        android:icon="@drawable/ic_commands"/>
+        android:icon="@drawable/ic_pharmacy"/>
     <item
         android:id="@+id/orders_item"
         android:title="Orders"
-        android:icon="@drawable/ic_user"/>
+        android:icon="@drawable/ic_medicine"/>
     <item
         android:id="@+id/profile_item"
         android:title="Profile"
-        android:icon="@drawable/ic_man"/>
+        android:icon="@drawable/ic_user"/>
 </menu>
