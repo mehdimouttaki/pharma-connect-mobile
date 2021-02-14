@@ -24,6 +24,8 @@ import org.json.JSONObject;
 import ma.pharmaconnect.pharmaconnect.dto.ClientShowDTO;
 import ma.pharmaconnect.pharmaconnect.dto.LoginDTO;
 
+import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
+
 public class LoginActivity extends AppCompatActivity {
 
     @Override
@@ -43,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickButton(View view) throws JSONException {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://10.128.72.17:8080/api/login";
+        String url = BASE_URL + "/api/login";
 
         EditText usernameEditText = findViewById(R.id.usernameTxt);
         EditText passwordEditText = findViewById(R.id.passwordTxt);

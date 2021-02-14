@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,6 +23,8 @@ import org.json.JSONObject;
 
 import ma.pharmaconnect.pharmaconnect.dto.ClientCreationDTO;
 import ma.pharmaconnect.pharmaconnect.dto.ClientShowDTO;
+
+import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -66,7 +67,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String url = "http://10.128.72.17:8080/api/clients";
+        String url = BASE_URL + "/api/clients";
 
         ClientCreationDTO clientCreationDTO = new ClientCreationDTO(firstName, lastName, email, phone, password);
 
