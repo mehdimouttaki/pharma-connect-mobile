@@ -1,4 +1,4 @@
-package ma.pharmaconnect.pharmaconnect;
+package ma.pharmaconnect.pharmaconnect.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
+
+import ma.pharmaconnect.pharmaconnect.LoginActivity;
+import ma.pharmaconnect.pharmaconnect.R;
 
 /**
  * A simple {@link Fragment} subclass.
