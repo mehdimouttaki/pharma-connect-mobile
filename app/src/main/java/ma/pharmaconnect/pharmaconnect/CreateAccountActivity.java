@@ -81,7 +81,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 saveClientLocally(response);
-                startActivity(new Intent(CreateAccountActivity.this, ProfileActivity.class));
+                startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override

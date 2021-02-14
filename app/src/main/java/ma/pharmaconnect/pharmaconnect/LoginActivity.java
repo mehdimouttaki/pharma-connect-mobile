@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     saveClientLocally(response);
-                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }, new Response.ErrorListener() {
                 @Override
