@@ -12,4 +12,12 @@
         android:id="@+id/profile_item"
         android:title="Profile"
         android:icon="@drawable/ic_user"/>
+    <item
+        android:id=""
+        android:title="Chat"
+        android:icon="@drawable/ic_comments"/>
+    <item
+        android:id=""
+        android:title="Review"
+        android:icon="@drawable/ic_rating"/>
 </menu>
