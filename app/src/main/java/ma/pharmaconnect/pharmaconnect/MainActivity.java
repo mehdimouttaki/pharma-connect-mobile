@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             // By using switch we can easily get
             // the selected fragment
             // by using there id.
-            Fragment selectedFragment = null;
+            Fragment selectedFragment = new OrderFragment();
             switch (item.getItemId()) {
                 case R.id.pharmacy_item:
                     selectedFragment = new PharamcyFragment();

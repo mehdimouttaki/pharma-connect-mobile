@@ -13,11 +13,11 @@
         android:title="Profile"
         android:icon="@drawable/ic_user"/>
     <item
-        android:id=""
+        android:id="@+id/chat"
         android:title="Chat"
         android:icon="@drawable/ic_comments"/>
     <item
-        android:id=""
+        android:id="@+id/review"
         android:title="Review"
         android:icon="@drawable/ic_rating"/>
 </menu>
