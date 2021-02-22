@@ -1,9 +1,7 @@
 package ma.pharmaconnect.pharmaconnect;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,7 +19,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ma.pharmaconnect.pharmaconnect.dto.ClientShowDTO;
 import ma.pharmaconnect.pharmaconnect.dto.LoginDTO;
 
 import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
@@ -32,10 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        String usernameFromSharedPref = sharedPref.getString("username", null);
-        if (usernameFromSharedPref != null) {
+        if (CurrentUserUtils.isConnected(this)) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
@@ -60,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(loginDTOJson), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    saveClientLocally(response);
+                    CurrentUserUtils.saveClientLocally(getApplicationContext(), response, password);
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }, new Response.ErrorListener() {
@@ -74,20 +68,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void saveClientLocally(JSONObject response) {
-        ClientShowDTO clientShowDTO = new Gson().fromJson(response.toString(), ClientShowDTO.class);
-
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("username", clientShowDTO.getUsername());
-        editor.putString("firstName", clientShowDTO.getFirstName());
-        editor.putString("lastName", clientShowDTO.getLastName());
-        editor.putString("phone", clientShowDTO.getPhone());
-        editor.putString("status", clientShowDTO.getStatus());
-        editor.putString("role", clientShowDTO.getRole());
-        editor.apply();
-    }
 
     public void onClickTextDontHaveAccount(View view) {
         Intent intent = new Intent(this, CreateAccountActivity.class);

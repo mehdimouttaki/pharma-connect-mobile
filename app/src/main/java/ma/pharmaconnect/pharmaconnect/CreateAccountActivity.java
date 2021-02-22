@@ -1,9 +1,7 @@
 package ma.pharmaconnect.pharmaconnect;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ma.pharmaconnect.pharmaconnect.dto.ClientCreationDTO;
-import ma.pharmaconnect.pharmaconnect.dto.ClientShowDTO;
 
 import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
 
@@ -76,7 +73,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(clientCreationDTOJson), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                saveClientLocally(response);
+                CurrentUserUtils.saveClientLocally(getApplicationContext(), response, password);
                 startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
             }
         }, new Response.ErrorListener() {
@@ -90,18 +87,4 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     }
 
-    private void saveClientLocally(JSONObject response) {
-        ClientShowDTO clientShowDTO = new Gson().fromJson(response.toString(), ClientShowDTO.class);
-
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("username", clientShowDTO.getUsername());
-        editor.putString("firstName", clientShowDTO.getFirstName());
-        editor.putString("lastName", clientShowDTO.getLastName());
-        editor.putString("phone", clientShowDTO.getPhone());
-        editor.putString("status", clientShowDTO.getStatus());
-        editor.putString("role", clientShowDTO.getRole());
-        editor.apply();
-    }
 }

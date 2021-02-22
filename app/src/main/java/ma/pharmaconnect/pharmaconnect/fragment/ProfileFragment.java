@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
+import ma.pharmaconnect.pharmaconnect.CurrentUserUtils;
 import ma.pharmaconnect.pharmaconnect.LoginActivity;
 import ma.pharmaconnect.pharmaconnect.R;
 
@@ -95,10 +96,7 @@ public class ProfileFragment extends Fragment {
 
 
     public void logout() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.clear();
-        editor.apply();
+        CurrentUserUtils.clearUser(getActivity().getApplicationContext());
         startActivity(new Intent(getActivity().getApplicationContext(), LoginActivity.class));
         getActivity().finish();
     }
