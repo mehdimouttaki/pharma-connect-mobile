@@ -5,15 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -21,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,26 +86,15 @@ public class PharamcyFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(view.getContext());
 
-        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Type listType = new TypeToken<ArrayList<PharmacyShowDTO>>() {
-                }.getType();
-                List<PharmacyShowDTO> pharmacyShowDTOList = new Gson().fromJson(response, listType);
-                changeRecyclerView(view.getContext(), pharmacyShowDTOList);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }){
+        StringRequest request = new StringRequest(url, response -> {
+            Type listType = new TypeToken<ArrayList<PharmacyShowDTO>>() {
+            }.getType();
+            List<PharmacyShowDTO> pharmacyShowDTOList = new Gson().fromJson(response, listType);
+            changeRecyclerView(view.getContext(), pharmacyShowDTOList);
+        }, error -> Toast.makeText(view.getContext(), "Error " + error.getMessage(), Toast.LENGTH_LONG).show()) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String>  params = new HashMap<>();
-                params.put("username", CurrentUserUtils.currentUsername(view.getContext()));
-                params.put("password", CurrentUserUtils.currentPassword(view.getContext()));
-                return params;
+                return CurrentUserUtils.getMapHeaders(view.getContext());
             }
         };
 

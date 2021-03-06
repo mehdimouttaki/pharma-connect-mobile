@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ma.pharmaconnect.pharmaconnect.dto.ClientShowDTO;
 
 public class CurrentUserUtils {
@@ -56,5 +59,12 @@ public class CurrentUserUtils {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
         editor.apply();
+    }
+
+    public static Map<String, String> getMapHeaders(Context ctx) {
+        Map<String, String> params = new HashMap<>();
+        params.put("username", CurrentUserUtils.currentUsername(ctx));
+        params.put("password", CurrentUserUtils.currentPassword(ctx));
+        return params;
     }
 }
