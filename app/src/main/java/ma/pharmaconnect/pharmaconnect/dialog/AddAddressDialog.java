@@ -30,13 +30,16 @@ import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
 
 public class AddAddressDialog extends Dialog implements View.OnClickListener {
 
-    public Activity activity;
+    private final ChooseAddressDialog chooseAddressDialog;
+    public final Activity activity;
     public Button add;
     public EditText numberTxt, streetTxt, detailTxt, zipTxt, cityTxt;
 
-    public AddAddressDialog(Activity activity) {
+
+    public AddAddressDialog(Activity activity, ChooseAddressDialog chooseAddressDialog) {
         super(activity);
         this.activity = activity;
+        this.chooseAddressDialog = chooseAddressDialog;
     }
 
     @Override
@@ -93,7 +96,10 @@ public class AddAddressDialog extends Dialog implements View.OnClickListener {
                 Request.Method.POST,
                 url,
                 new JSONObject(addressDTOJson),
-                response -> Toast.makeText(activity.getApplicationContext(), "Address created successfully.", Toast.LENGTH_LONG).show(),
+                response -> {
+                    Toast.makeText(activity.getApplicationContext(), "Address created successfully.", Toast.LENGTH_LONG).show();
+                    chooseAddressDialog.show();
+                },
                 error -> Log.e("HTTP_CALL", error.toString())
         ) {
             @Override

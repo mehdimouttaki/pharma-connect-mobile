@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import ma.pharmaconnect.pharmaconnect.R;
 
@@ -40,6 +41,10 @@ public class ChooseProductDialog extends Dialog implements android.view.View.OnC
         switch (v.getId()) {
             case R.id.next:
                 String codeProduct = codeProductTxt.getText().toString();
+                if (codeProduct == null || codeProduct.trim().isEmpty()) {
+                    Toast.makeText(activity.getApplicationContext(), "Enter a valid product", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 ChooseAddressDialog chooseAddressDialog = new ChooseAddressDialog(activity, codeProduct);
                 chooseAddressDialog.show();
                 dismiss();

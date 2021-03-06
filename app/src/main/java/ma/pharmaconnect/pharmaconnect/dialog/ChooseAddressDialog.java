@@ -14,12 +14,17 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import ma.pharmaconnect.pharmaconnect.CurrentUserUtils;
@@ -35,6 +40,7 @@ public class ChooseAddressDialog extends Dialog implements View.OnClickListener 
     public Button confirm, addOtherField;
     private RadioGroup groupAddress;
     private final String codeProduct;
+    private List<String> addresses = new ArrayList<>();
 
     public ChooseAddressDialog(Activity activity, String codeProduct) {
         super(activity);
@@ -53,7 +59,49 @@ public class ChooseAddressDialog extends Dialog implements View.OnClickListener 
         groupAddress = findViewById(R.id.group_address);
         addOtherField.setOnClickListener(this);
         confirm.setOnClickListener(this);
+        getAllAddresses();
         getWindow().setLayout(850, WRAP_CONTENT);
+    }
+
+    private void getAllAddresses() {
+        String url = BASE_URL + "/api/my-address";
+
+        RequestQueue queue = Volley.newRequestQueue(activity.getApplicationContext());
+
+        StringRequest request = new StringRequest(url, response -> {
+            Type listType = new TypeToken<ArrayList<String>>() {
+            }.getType();
+            addresses = new Gson().fromJson(response, listType);
+            refreshGroupAddress();
+        }, error -> Toast.makeText(activity.getApplicationContext(), "Error " + error.getMessage(), Toast.LENGTH_LONG).show()) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return CurrentUserUtils.getMapHeaders(activity.getApplicationContext());
+            }
+        };
+
+        queue.add(request);
+    }
+
+    private void refreshGroupAddress() {
+        groupAddress.clearCheck();
+        groupAddress.removeAllViews();
+        if (addresses.isEmpty()) {
+            return;
+        }
+        final RadioButton[] rb = new RadioButton[addresses.size()];
+        for (int i = 0; i < rb.length; i++) {
+            rb[i] = new RadioButton(activity.getApplicationContext());
+            rb[i].setText(addresses.get(i));
+            rb[i].setId(i + 100);
+            groupAddress.addView(rb[i]);
+        }
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        getAllAddresses();
     }
 
     @Override
@@ -66,19 +114,21 @@ public class ChooseAddressDialog extends Dialog implements View.OnClickListener 
                     // find the radiobutton by returned id
                     RadioButton radioAddress = findViewById(selectedId);
                     createOrder(codeProduct, radioAddress.getText().toString());
+                    dismiss();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.add_another_field:
-                AddAddressDialog addAddressDialog = new AddAddressDialog(activity);
+                AddAddressDialog addAddressDialog = new AddAddressDialog(activity, this);
                 addAddressDialog.show();
-
+                hide();
                 break;
             default:
                 break;
         }
-        dismiss();
+
     }
 
     private void createOrder(String productCode, String address) throws JSONException {

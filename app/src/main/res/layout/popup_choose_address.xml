@@ -14,14 +14,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/group_address"
         android:orientation="vertical">
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="17, Lissasfa, Sidi Bennour"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="22 Metrane, Sidi Bennour"/>
     </RadioGroup>
 
     <Button
