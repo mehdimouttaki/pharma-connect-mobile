@@ -9,11 +9,20 @@
     android:paddingRight="10dp">
 
 
-    <RadioButton
-        android:id="@+id/radioButton"
+    <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Douar lmharir Metrane, Sidi Bennour" />
+        android:id="@+id/group_address"
+        android:orientation="vertical">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="17, Lissasfa, Sidi Bennour"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22 Metrane, Sidi Bennour"/>
+    </RadioGroup>
 
     <Button
         android:id="@+id/add_another_field"
@@ -26,10 +35,10 @@
 
 
     <Button
+        android:id="@+id/confirm"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/confirm"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="Confirm" />
