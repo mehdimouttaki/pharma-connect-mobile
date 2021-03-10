@@ -1,17 +1,35 @@
 package ma.pharmaconnect.pharmaconnect.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import ma.pharmaconnect.pharmaconnect.CurrentUserUtils;
 import ma.pharmaconnect.pharmaconnect.R;
+import ma.pharmaconnect.pharmaconnect.adapter.OrderAdapter;
 import ma.pharmaconnect.pharmaconnect.dialog.ChooseProductDialog;
+import ma.pharmaconnect.pharmaconnect.dto.OrderShowDTO;
+
+import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +46,7 @@ public class OrderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private RecyclerView orderRV;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -71,11 +90,50 @@ public class OrderFragment extends Fragment {
         if (CurrentUserUtils.isDelivery(view.getContext())) {
             fab.setVisibility(View.GONE);
         }
+
+
+        String url = BASE_URL + "/api/orders";
+
+
+        RequestQueue queue = Volley.newRequestQueue(view.getContext());
+
+        StringRequest request = new StringRequest(url, response -> {
+            Type listType = new TypeToken<ArrayList<OrderShowDTO>>() {
+            }.getType();
+            List<OrderShowDTO> orderDTOS = new Gson().fromJson(response, listType);
+            changeRecyclerView(view.getContext(), orderDTOS);
+        }, error -> Toast.makeText(view.getContext(), "Error " + error.getMessage(), Toast.LENGTH_LONG).show()) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return CurrentUserUtils.getMapHeaders(view.getContext());
+            }
+        };
+
+        queue.add(request);
+
+        // Lookup the recyclerview in activity layout
+        orderRV = view.findViewById(R.id.order_recycler_view);
+
+
         return view;
     }
 
     private void showEnterProductCodePopUp() {
         ChooseProductDialog chooseProductDialog = new ChooseProductDialog(getActivity());
         chooseProductDialog.show();
+    }
+
+
+    public void changeRecyclerView(Context context, List<OrderShowDTO> orders) {
+        // Initialize contacts
+        // Create adapter passing in the sample user data
+        OrderAdapter adapter = new OrderAdapter(orders);
+        // Attach the adapter to the recyclerview to populate items
+        orderRV.setAdapter(adapter);
+        // Set layout manager to position the items
+        orderRV.setLayoutManager(new LinearLayoutManager(context));
+
+        adapter.notifyDataSetChanged();
+
     }
 }
