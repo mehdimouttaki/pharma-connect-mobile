@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import ma.pharmaconnect.pharmaconnect.CurrentUserUtils;
 import ma.pharmaconnect.pharmaconnect.R;
 import ma.pharmaconnect.pharmaconnect.dialog.ChooseProductDialog;
 
@@ -67,12 +68,14 @@ public class OrderFragment extends Fragment {
 
         FloatingActionButton fab = view.findViewById(R.id.create_order);
         fab.setOnClickListener(v -> showEnterProductCodePopUp());
-
+        if (CurrentUserUtils.isDelivery(view.getContext())) {
+            fab.setVisibility(View.GONE);
+        }
         return view;
     }
 
     private void showEnterProductCodePopUp() {
-        ChooseProductDialog chooseProductDialog=new ChooseProductDialog(getActivity());
+        ChooseProductDialog chooseProductDialog = new ChooseProductDialog(getActivity());
         chooseProductDialog.show();
     }
 }

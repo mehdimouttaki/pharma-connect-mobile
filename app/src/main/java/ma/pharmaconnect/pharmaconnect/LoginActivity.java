@@ -2,16 +2,14 @@ package ma.pharmaconnect.pharmaconnect;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -51,18 +49,14 @@ public class LoginActivity extends AppCompatActivity {
             LoginDTO loginDTO = new LoginDTO(username, password);
             String loginDTOJson = new Gson().toJson(loginDTO);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(loginDTOJson), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    CurrentUserUtils.saveClientLocally(getApplicationContext(), response, password);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    new JSONObject(loginDTOJson), response -> {
+                CurrentUserUtils.saveClientLocally(getApplicationContext(), response, password);
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            },
+                    error -> Log.e("HTTP_CALL", error.getMessage()));
 
             queue.add(jsonObjectRequest);
         }

@@ -78,17 +78,20 @@ public class ProfileFragment extends Fragment {
         String firstNameFromSharedPref = sharedPref.getString("firstName", null);
         String lastNameFromSharedPref = sharedPref.getString("lastName", null);
         String phoneFromSharedPref = sharedPref.getString("phone", null);
+        String roleFromSharedPref = sharedPref.getString("role", null);
 
         EditText usernameEditText = view.findViewById(R.id.usernameTxt);
         EditText firstNameEditText = view.findViewById(R.id.firstNameTxt);
         EditText lastNameEditText = view.findViewById(R.id.lastNameTxt);
         EditText phoneEditText = view.findViewById(R.id.phoneTxt);
         EditText passwordEditText = view.findViewById(R.id.passwordTxt);
+        EditText roleEditText = view.findViewById(R.id.roleTxt);
 
         usernameEditText.setText(usernameFromSharedPref);
         firstNameEditText.setText(firstNameFromSharedPref);
         lastNameEditText.setText(lastNameFromSharedPref);
         phoneEditText.setText(phoneFromSharedPref);
+        roleEditText.setText(roleFromSharedPref);
         passwordEditText.setText("******");
 
         return view;

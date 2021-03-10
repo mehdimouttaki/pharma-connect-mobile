@@ -67,4 +67,17 @@ public class CurrentUserUtils {
         params.put("password", CurrentUserUtils.currentPassword(ctx));
         return params;
     }
+
+    public static String getRole(Context ctx) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return sharedPref.getString("role", null);
+    }
+
+    public static boolean isDelivery(Context ctx) {
+        return "DELIVERY".equalsIgnoreCase(getRole(ctx));
+    }
+
+    public static boolean isClient(Context ctx) {
+        return "CLIENT".equalsIgnoreCase(getRole(ctx));
+    }
 }
