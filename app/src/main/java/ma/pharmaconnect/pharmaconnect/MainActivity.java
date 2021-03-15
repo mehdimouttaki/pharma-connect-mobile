@@ -10,9 +10,11 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import ma.pharmaconnect.pharmaconnect.fragment.ChatFragment;
 import ma.pharmaconnect.pharmaconnect.fragment.OrderFragment;
 import ma.pharmaconnect.pharmaconnect.fragment.PharamcyFragment;
 import ma.pharmaconnect.pharmaconnect.fragment.ProfileFragment;
+import ma.pharmaconnect.pharmaconnect.fragment.ReviewFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.profile_item:
                     selectedFragment = new ProfileFragment();
+                    break;
+                case R.id.chat:
+                    selectedFragment = new ChatFragment();
+                    break;
+                case R.id.review:
+                    selectedFragment = new ReviewFragment();
                     break;
             }
             // It will help to replace the
