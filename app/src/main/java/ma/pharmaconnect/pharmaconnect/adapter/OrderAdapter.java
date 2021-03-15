@@ -1,31 +1,47 @@
 package ma.pharmaconnect.pharmaconnect.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import ma.pharmaconnect.pharmaconnect.CurrentUserUtils;
 import ma.pharmaconnect.pharmaconnect.R;
 import ma.pharmaconnect.pharmaconnect.dto.OrderShowDTO;
+import ma.pharmaconnect.pharmaconnect.fragment.OrderFragment;
+
+import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
+import static ma.pharmaconnect.pharmaconnect.dto.OrderStatus.INIT;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
+    private final Context context;
+    private final OrderFragment orderFragment;
     // ... view holder defined above...
 
     // Store a member variable for the contacts
     private List<OrderShowDTO> orders = new ArrayList<>();
 
     // Pass in the contact array into the constructor
-    public OrderAdapter(List<OrderShowDTO> ordersList) {
+    public OrderAdapter(List<OrderShowDTO> ordersList, Context context, OrderFragment orderFragment) {
         this.orders = ordersList;
+        this.context = context;
+        this.orderFragment = orderFragment;
     }
 
 
@@ -34,8 +50,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView orderIdTextView;
-        public TextView personNameTextView;
+        public TextView orderIdTextView, personNameTextView, statusTextView;
+        public Button takeItButton;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -46,6 +62,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
             orderIdTextView = itemView.findViewById(R.id.order_id);
             personNameTextView = itemView.findViewById(R.id.person_name);
+            statusTextView = itemView.findViewById(R.id.order_status);
+            takeItButton = itemView.findViewById(R.id.take_it_btn);
         }
     }
 
@@ -70,12 +88,46 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
         // Set item views based on your views and data model
         holder.orderIdTextView.setText(String.valueOf(order.getId()));
-        holder.personNameTextView.setText(order.getClient().getFirstName());
+        if (CurrentUserUtils.isClient(context)) {
+            holder.personNameTextView.setText(
+                    (order.getDeliveryMan() == null) ? "" : order.getDeliveryMan().getFullName()
+            );
+        } else {
+            holder.personNameTextView.setText(order.getClient().getFullName());
+        }
+        holder.statusTextView.setText(order.getOrderStatus().name());
+        if (INIT.equals(order.getOrderStatus()) && CurrentUserUtils.isDelivery(context)) {
+            holder.takeItButton.setVisibility(View.VISIBLE);
+            holder.takeItButton.setOnClickListener(v -> {
+                deliveryTakeOrder(order.getId());
+            });
+        }
     }
+
 
     @Override
     public int getItemCount() {
         return orders.size();
     }
 
+
+    private void deliveryTakeOrder(Integer orderId) {
+        String url = BASE_URL + "/api/orders/take-it/" + orderId;
+
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest request = new StringRequest(url, response -> {
+            orderFragment.initData();
+            notifyDataSetChanged();
+        }, error -> Log.e("HTTP_CALL", error.getMessage())) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return CurrentUserUtils.getMapHeaders(context);
+            }
+        };
+
+        queue.add(request);
+
+    }
 }

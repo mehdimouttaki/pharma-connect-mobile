@@ -13,5 +13,6 @@ public class OrderShowDTO {
     private String address;
     private ClientShowDTO client;
     private DeliveryManShowDTO deliveryMan;
+    private OrderStatus orderStatus;
 
 }

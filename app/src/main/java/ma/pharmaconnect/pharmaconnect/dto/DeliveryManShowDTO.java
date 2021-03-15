@@ -18,4 +18,8 @@ public class DeliveryManShowDTO {
     private String role;
     private Date createdAt;
     private String status;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

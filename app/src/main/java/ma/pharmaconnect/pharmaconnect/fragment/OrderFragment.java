@@ -92,30 +92,34 @@ public class OrderFragment extends Fragment {
         }
 
 
-        String url = BASE_URL + "/api/orders";
-
-
-        RequestQueue queue = Volley.newRequestQueue(view.getContext());
-
-        StringRequest request = new StringRequest(url, response -> {
-            Type listType = new TypeToken<ArrayList<OrderShowDTO>>() {
-            }.getType();
-            List<OrderShowDTO> orderDTOS = new Gson().fromJson(response, listType);
-            changeRecyclerView(view.getContext(), orderDTOS);
-        }, error -> Toast.makeText(view.getContext(), "Error " + error.getMessage(), Toast.LENGTH_LONG).show()) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return CurrentUserUtils.getMapHeaders(view.getContext());
-            }
-        };
-
-        queue.add(request);
+        initData();
 
         // Lookup the recyclerview in activity layout
         orderRV = view.findViewById(R.id.order_recycler_view);
 
 
         return view;
+    }
+
+    public void initData() {
+        String url = BASE_URL + "/api/orders";
+
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+
+        StringRequest request = new StringRequest(url, response -> {
+            Type listType = new TypeToken<ArrayList<OrderShowDTO>>() {
+            }.getType();
+            List<OrderShowDTO> orderDTOS = new Gson().fromJson(response, listType);
+            changeRecyclerView(getContext(), orderDTOS);
+        }, error -> Toast.makeText(getContext(), "Error " + error.getMessage(), Toast.LENGTH_LONG).show()) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return CurrentUserUtils.getMapHeaders(getContext());
+            }
+        };
+
+        queue.add(request);
     }
 
     private void showEnterProductCodePopUp() {
@@ -127,7 +131,7 @@ public class OrderFragment extends Fragment {
     public void changeRecyclerView(Context context, List<OrderShowDTO> orders) {
         // Initialize contacts
         // Create adapter passing in the sample user data
-        OrderAdapter adapter = new OrderAdapter(orders);
+        OrderAdapter adapter = new OrderAdapter(orders, getContext() , this);
         // Attach the adapter to the recyclerview to populate items
         orderRV.setAdapter(adapter);
         // Set layout manager to position the items
