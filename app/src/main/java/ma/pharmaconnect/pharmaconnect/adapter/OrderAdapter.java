@@ -25,6 +25,8 @@ import ma.pharmaconnect.pharmaconnect.dto.OrderShowDTO;
 import ma.pharmaconnect.pharmaconnect.fragment.OrderFragment;
 
 import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
+import static ma.pharmaconnect.pharmaconnect.dto.OrderStatus.ATTACHED_TO_DELIVERY;
+import static ma.pharmaconnect.pharmaconnect.dto.OrderStatus.DELIVERING;
 import static ma.pharmaconnect.pharmaconnect.dto.OrderStatus.INIT;
 
 // Create the basic adapter extending from RecyclerView.Adapter
@@ -51,7 +53,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView orderIdTextView, personNameTextView, statusTextView;
-        public Button takeItButton;
+        public Button actionButton;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -63,7 +65,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             orderIdTextView = itemView.findViewById(R.id.order_id);
             personNameTextView = itemView.findViewById(R.id.person_name);
             statusTextView = itemView.findViewById(R.id.order_status);
-            takeItButton = itemView.findViewById(R.id.take_it_btn);
+            actionButton = itemView.findViewById(R.id.action_btn);
         }
     }
 
@@ -97,9 +99,23 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         }
         holder.statusTextView.setText(order.getOrderStatus().name());
         if (INIT.equals(order.getOrderStatus()) && CurrentUserUtils.isDelivery(context)) {
-            holder.takeItButton.setVisibility(View.VISIBLE);
-            holder.takeItButton.setOnClickListener(v -> {
-                deliveryTakeOrder(order.getId());
+            holder.actionButton.setVisibility(View.VISIBLE);
+            holder.actionButton.setOnClickListener(v -> {
+                changeOrderStatus(order.getId(), "take");
+            });
+        } else if (ATTACHED_TO_DELIVERY.equals(order.getOrderStatus()) && CurrentUserUtils.isDelivery(context)) {
+            holder.actionButton.setVisibility(View.VISIBLE);
+            holder.actionButton.setText("Ongoing");
+            holder.actionButton.setOnClickListener(v -> {
+                changeOrderStatus(order.getId(), "delivering");
+
+            });
+        } else if (DELIVERING.equals(order.getOrderStatus())) {
+            holder.actionButton.setVisibility(View.VISIBLE);
+            holder.actionButton.setText("Delivered");
+            holder.actionButton.setOnClickListener(v -> {
+                changeOrderStatus(order.getId(), "delivered");
+
             });
         }
     }
@@ -111,8 +127,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
 
-    private void deliveryTakeOrder(Integer orderId) {
-        String url = BASE_URL + "/api/orders/take-it/" + orderId;
+    private void changeOrderStatus(Integer orderId, String status) {
+        String url = BASE_URL + "/api/orders/" + status + "-it/" + orderId;
 
 
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -128,6 +144,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         };
 
         queue.add(request);
-
     }
+
+
 }
