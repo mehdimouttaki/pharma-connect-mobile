@@ -21,12 +21,14 @@ import java.util.Map;
 
 import ma.pharmaconnect.pharmaconnect.CurrentUserUtils;
 import ma.pharmaconnect.pharmaconnect.R;
+import ma.pharmaconnect.pharmaconnect.dialog.ReviewDialog;
 import ma.pharmaconnect.pharmaconnect.dto.OrderShowDTO;
 import ma.pharmaconnect.pharmaconnect.fragment.OrderFragment;
 
 import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
 import static ma.pharmaconnect.pharmaconnect.dto.OrderStatus.ATTACHED_TO_DELIVERY;
 import static ma.pharmaconnect.pharmaconnect.dto.OrderStatus.DELIVERING;
+import static ma.pharmaconnect.pharmaconnect.dto.OrderStatus.DONE;
 import static ma.pharmaconnect.pharmaconnect.dto.OrderStatus.INIT;
 
 // Create the basic adapter extending from RecyclerView.Adapter
@@ -115,9 +117,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             holder.actionButton.setText("Delivered");
             holder.actionButton.setOnClickListener(v -> {
                 changeOrderStatus(order.getId(), "delivered");
-
+            });
+        } else if (DONE.equals(order.getOrderStatus()) && CurrentUserUtils.isClient(context)) {
+            holder.actionButton.setVisibility(View.VISIBLE);
+            holder.actionButton.setText("Review");
+            holder.actionButton.setOnClickListener(v -> {
+                showReviewDialog(order);
             });
         }
+    }
+
+    private void showReviewDialog(OrderShowDTO order) {
+        ReviewDialog reviewDialog = new ReviewDialog(orderFragment.getActivity(), order);
+        reviewDialog.show();
     }
 
 
