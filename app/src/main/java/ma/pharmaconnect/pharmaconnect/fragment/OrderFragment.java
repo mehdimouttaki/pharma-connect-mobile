@@ -57,12 +57,12 @@ public class OrderFragment extends Fragment {
         if (CurrentUserUtils.isDelivery(view.getContext())) {
             fab.setVisibility(View.GONE);
         }
+        // Lookup the recyclerview in activity layout
+        orderRV = view.findViewById(R.id.order_recycler_view);
+
 
 
         initData();
-
-        // Lookup the recyclerview in activity layout
-        orderRV = view.findViewById(R.id.order_recycler_view);
 
 
         return view;
