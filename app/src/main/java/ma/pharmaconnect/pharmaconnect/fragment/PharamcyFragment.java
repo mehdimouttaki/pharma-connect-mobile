@@ -39,8 +39,6 @@ public class PharamcyFragment extends Fragment {
     private RecyclerView pharmacyRV;
 
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +69,7 @@ public class PharamcyFragment extends Fragment {
         queue.add(request);
 
         // Lookup the recyclerview in activity layout
-        pharmacyRV = (RecyclerView) view.findViewById(R.id.pharmacy_recycler_view);
+        pharmacyRV = view.findViewById(R.id.pharmacy_recycler_view);
 
 
         return view;

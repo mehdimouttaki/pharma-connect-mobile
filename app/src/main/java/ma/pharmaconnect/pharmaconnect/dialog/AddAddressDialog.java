@@ -57,7 +57,7 @@ public class AddAddressDialog extends Dialog implements View.OnClickListener {
 
         add = findViewById(R.id.add);
         add.setOnClickListener(this);
-        getWindow().setLayout(850, WRAP_CONTENT);
+        getWindow().setLayout(1050, WRAP_CONTENT);
     }
 
     @Override

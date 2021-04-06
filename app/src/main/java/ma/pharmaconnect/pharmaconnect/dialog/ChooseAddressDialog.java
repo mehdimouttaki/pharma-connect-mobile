@@ -30,6 +30,7 @@ import java.util.Map;
 import ma.pharmaconnect.pharmaconnect.CurrentUserUtils;
 import ma.pharmaconnect.pharmaconnect.R;
 import ma.pharmaconnect.pharmaconnect.dto.OrderCreationDTO;
+import ma.pharmaconnect.pharmaconnect.dto.ProductShowDTO;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static ma.pharmaconnect.pharmaconnect.Constant.BASE_URL;
@@ -39,13 +40,13 @@ public class ChooseAddressDialog extends Dialog implements View.OnClickListener 
     public Activity activity;
     public Button confirm, addOtherField;
     private RadioGroup groupAddress;
-    private final String codeProduct;
+    private final List<ProductShowDTO> products;
     private List<String> addresses = new ArrayList<>();
 
-    public ChooseAddressDialog(Activity activity, String codeProduct) {
+    public ChooseAddressDialog(Activity activity, List<ProductShowDTO> products) {
         super(activity);
         this.activity = activity;
-        this.codeProduct = codeProduct;
+        this.products = products;
 
     }
 
@@ -113,7 +114,7 @@ public class ChooseAddressDialog extends Dialog implements View.OnClickListener 
 
                     // find the radiobutton by returned id
                     RadioButton radioAddress = findViewById(selectedId);
-                    createOrder(codeProduct, radioAddress.getText().toString());
+                    createOrder(radioAddress.getText().toString());
                     dismiss();
 
                 } catch (JSONException e) {
@@ -131,11 +132,15 @@ public class ChooseAddressDialog extends Dialog implements View.OnClickListener 
 
     }
 
-    private void createOrder(String productCode, String address) throws JSONException {
+    private void createOrder(String address) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(activity.getApplicationContext());
         String url = BASE_URL + "/api/orders";
-        OrderCreationDTO orderCreationDTO = new OrderCreationDTO(productCode, address);
+        List<String> codes = new ArrayList<>();
+        for (ProductShowDTO p : products) {
+            codes.add(p.getCode());
+        }
+        OrderCreationDTO orderCreationDTO = new OrderCreationDTO(codes, address);
 
 
         String orderDTOJson = new Gson().toJson(orderCreationDTO);
