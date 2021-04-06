@@ -3,19 +3,17 @@
     package="ma.pharmaconnect.pharmaconnect">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_logo"
+        android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_logo"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.PharmaConnect">
         <activity android:name=".MainActivity"></activity>
-        <activity android:name=".ProfileActivity" >
-
-        </activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
