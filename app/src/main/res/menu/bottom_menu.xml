@@ -3,7 +3,7 @@
     <item
         android:id="@+id/pharmacy_item"
         android:title="Pharmacy"
-        android:icon="@drawable/ic_pharmacy"/>
+        android:icon="@drawable/ic_pharmacy__2_"/>
     <item
         android:id="@+id/orders_item"
         android:title="Orders"
